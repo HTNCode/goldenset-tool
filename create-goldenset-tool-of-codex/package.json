@@ -1,0 +1,1 @@
+{"name":"create-goldenset-tool-of-codex","version":"1.0.0","private":true,"type":"module","scripts":{"dev":"python -m http.server 8080","test":"node --test","check":"node --check src/app.js && node --check src/generator.js && node --test"}}
