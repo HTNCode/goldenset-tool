@@ -1,0 +1,24 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import {
+  generateCandidates,
+  toCsv,
+  toJsonl,
+  validateInput,
+} from "../src/generator.js";
+const input = {
+  useCase: "配送状況を案内するカスタマーサポート",
+  persona: "初めて利用する顧客",
+  count: 5,
+  criteria: ["正確であること", "断定しないこと"],
+  categories: ["standard", "edge", "safety"],
+};
+test("指定件数を生成する", () =>
+  assert.equal(generateCandidates(input).length, 5));
+test("不正入力を拒否する", () =>
+  assert.match(validateInput({ ...input, useCase: "短い" }), /10文字/));
+test("JSONLとCSVへ変換する", () => {
+  const x = generateCandidates({ ...input, count: 1 });
+  assert.doesNotThrow(() => JSON.parse(toJsonl(x)));
+  assert.match(toCsv(x), /^prompt,referenceResponse/);
+});

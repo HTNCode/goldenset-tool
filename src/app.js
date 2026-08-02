@@ -1,0 +1,129 @@
+import {
+  generateCandidates,
+  toCsv,
+  toJsonl,
+  validateInput,
+} from "./generator.js";
+import { setupIntake } from "./intake.js";
+const KEY = "golden-foundry-v1",
+  state = { items: load() },
+  list = document.querySelector("#list"),
+  empty = document.querySelector("#empty"),
+  dialog = document.querySelector("#dialog");
+function load() {
+  try {
+    const x = JSON.parse(localStorage.getItem(KEY) ?? "[]");
+    return Array.isArray(x) ? x : [];
+  } catch {
+    return [];
+  }
+}
+function save() {
+  localStorage.setItem(KEY, JSON.stringify(state.items));
+}
+function esc(v) {
+  const d = document.createElement("div");
+  d.textContent = v;
+  return d.innerHTML;
+}
+function render() {
+  empty.hidden = state.items.length > 0;
+  list.innerHTML = state.items
+    .map(
+      (x, i) =>
+        `<section class="card ${x.status}" data-id="${x.id}"><div class="cardtop"><b>${String(i + 1).padStart(2, "0")}</b><i class="tag ${x.category}">${x.category === "standard" ? "標準" : x.category === "edge" ? "エッジ" : "安全性"}</i><span>${x.status === "approved" ? "✓ 承認済み" : x.status === "rejected" ? "× 除外" : "レビュー待ち"}</span></div><label>質問<textarea data-field="prompt">${esc(x.prompt)}</textarea></label><label>期待される回答<textarea data-field="expectedAnswer">${esc(x.expectedAnswer)}</textarea></label>${x.checks.length === 0 ? "" : `<details><summary>品質チェック　${x.checks.filter((c) => c.passed).length}/${x.checks.length}</summary><ul>${x.checks.map((c) => `<li class="${c.passed ? "pass" : "warn"}"><b>${c.passed ? "✓" : "!"}</b><span>${esc(c.criterion)}<small>${esc(c.note)}</small></span></li>`).join("")}</ul></details>`}<div class="actions"><button data-action="reject" class="outline">除外</button><button data-action="approve" class="approve">${x.status === "approved" ? "承認を取り消す" : "承認する"}</button></div></section>`,
+    )
+    .join("");
+  const ok = state.items.filter((x) => x.status === "approved").length,
+    p = state.items.length ? Math.round((ok / state.items.length) * 100) : 0;
+  document.querySelector("#total").textContent = state.items.length;
+  document.querySelector("#rate").textContent = p + "% 承認済み";
+  document.querySelector("#bar").style.width = p + "%";
+}
+document.querySelector("#form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const input = {
+      useCase: useCase.value.trim(),
+      persona: persona.value.trim(),
+      count: Number(count.value),
+      criteria: criteria.value
+        .split("\n")
+        .map((v) => v.trim())
+        .filter(Boolean),
+      categories: [
+        ["standard", "standard"],
+        ["edge", "edge"],
+        ["safety", "safety"],
+      ]
+        .filter(([id]) => document.querySelector("#" + id).checked)
+        .map((x) => x[1]),
+    },
+    error = validateInput(input);
+  if (error) return alert(error);
+  state.items.push(...generateCandidates(input));
+  save();
+  render();
+});
+list.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-action]");
+  if (!b) return;
+  const x = state.items.find((x) => x.id === b.closest("[data-id]").dataset.id);
+  x.status =
+    b.dataset.action === "approve"
+      ? x.status === "approved"
+        ? "pending"
+        : "approved"
+      : "rejected";
+  x.updatedAt = new Date().toISOString();
+  save();
+  render();
+});
+list.addEventListener("change", (e) => {
+  if (!e.target.dataset.field) return;
+  const x = state.items.find(
+      (x) => x.id === e.target.closest("[data-id]").dataset.id,
+    ),
+    f = e.target.dataset.field;
+  if (x && ["prompt", "expectedAnswer"].includes(f)) {
+    x[f] = e.target.value.trim();
+    save();
+  }
+});
+function download(name, data, type) {
+  const u = URL.createObjectURL(new Blob([data], { type })),
+    a = document.createElement("a");
+  a.href = u;
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(u);
+}
+function approved() {
+  const x = state.items.filter((x) => x.status === "approved");
+  if (!x.length) alert("先に1件以上を承認してください。");
+  return x;
+}
+document.querySelector("#export").onclick = () => dialog.showModal();
+document.querySelector("#close").onclick = () => dialog.close();
+document.querySelector("#jsonl").onclick = () => {
+  const x = approved();
+  if (x.length)
+    download("golden-dataset.jsonl", toJsonl(x), "application/x-ndjson");
+};
+document.querySelector("#csv").onclick = () => {
+  const x = approved();
+  if (x.length)
+    download(
+      "golden-dataset.csv",
+      "\uFEFF" + toCsv(x),
+      "text/csv;charset=utf-8",
+    );
+};
+render();
+
+// 取り込み機能はホストされた環境でのみ有効になる。
+// ローカルでは設定と AWS SDK のバンドルがないため、ボタンごと隠れる。
+void setupIntake((candidates) => {
+  state.items.push(...candidates);
+  save();
+  render();
+});

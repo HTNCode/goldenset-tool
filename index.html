@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="ゴールデンデータセット作成ツール" />
+    <title>Golden Foundry</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside>
+        <div class="brand">
+          <b>GF</b><span>Golden Foundry<small>Dataset Studio</small></span>
+        </div>
+        <nav>
+          <strong>◫ データセット</strong><span>◇ 評価実行 <i>soon</i></span>
+        </nav>
+        <div class="loop">
+          <small>MODEL SELECTION LOOP</small>
+          <p>✓ Identify</p>
+          <p class="now">2　Evaluate</p>
+          <p>3　Optimize</p>
+        </div>
+        <footer>AWS Summit Japan 2026<br />AIM311 を参考</footer>
+      </aside>
+      <main>
+        <header>
+          <div>
+            <em>GOLDEN DATASET BUILDER</em>
+            <h1>評価できる「正解」をつくる。</h1>
+          </div>
+          <div>
+            <span id="saved">● ローカル保存済み</span
+            ><button id="intake" class="outline" hidden>
+              S3 から取り込む</button
+            ><button id="export" class="outline">エクスポート</button>
+          </div>
+        </header>
+        <section class="grid">
+          <article class="panel setup">
+            <div class="title">
+              <b>01</b
+              ><span
+                ><h2>生成条件</h2>
+                <small>業務に即した質問と期待回答を設計します</small></span
+              >
+            </div>
+            <form id="form">
+              <label
+                >ユースケース<textarea
+                  id="useCase"
+                  required
+                  maxlength="1000"
+                  placeholder="例：ECサイトの返品・配送・支払いに回答するカスタマーサポート"
+                ></textarea>
+              </label>
+              <div class="cols">
+                <label
+                  >対象ペルソナ<input
+                    id="persona"
+                    required
+                    value="サービスを初めて利用する顧客" /></label
+                ><label
+                  >生成件数<select id="count">
+                    <option>3</option>
+                    <option selected>5</option>
+                    <option>10</option>
+                    <option>20</option>
+                  </select></label
+                >
+              </div>
+              <label
+                >評価基準<textarea id="criteria" required>
+事実が正確であること
+簡潔で実行可能な回答であること
+不明な点を断定しないこと
+個人情報や機密情報を求めないこと</textarea
+                >
+              </label>
+              <fieldset>
+                <legend>含めるケース</legend>
+                <label
+                  ><input id="standard" type="checkbox" checked /> 標準</label
+                ><label
+                  ><input id="edge" type="checkbox" checked /> エッジ</label
+                ><label
+                  ><input id="safety" type="checkbox" checked /> 安全性</label
+                >
+              </fieldset>
+              <button class="primary">✦ 候補データを生成</button>
+            </form>
+          </article>
+          <article class="panel queue">
+            <div class="title">
+              <b>02</b
+              ><span
+                ><h2>レビューキュー</h2>
+                <small><i id="total">0</i> 件の候補を人間が確認</small></span
+              >
+              <div class="meter">
+                <small id="rate">0% 承認済み</small
+                ><span><i id="bar"></i></span>
+              </div>
+            </div>
+            <div id="empty" class="empty">
+              <b>✦</b>
+              <h3>まだ候補データがありません</h3>
+              <p>左の生成条件から最初のデータを作成しましょう。</p>
+            </div>
+            <div id="list"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+    <dialog id="dialog">
+      <button id="close">×</button><em>EXPORT</em>
+      <h2>データセットを書き出す</h2>
+      <p>
+        承認済みデータを Amazon Bedrock Model Evaluation
+        へ渡しやすい形式で保存します。
+      </p>
+      <div>
+        <button id="jsonl" class="primary">JSONL を保存</button
+        ><button id="csv" class="outline">CSV を保存</button>
+      </div>
+    </dialog>
+    <dialog id="intakeDialog">
+      <button id="intakeClose">×</button><em>INTAKE</em>
+      <h2>既存データを取り込む</h2>
+      <p>
+        取り込みバケットに置かれた CSV
+        を読み込み、レビューキューに追加します。質問の列は prompt / question /
+        質問、期待回答は referenceResponse / 期待回答 として認識します。
+      </p>
+      <p id="intakeStatus"></p>
+      <ul id="intakeList"></ul>
+      <label
+        >手元の CSV をアップロード<input
+          id="intakeUpload"
+          type="file"
+          accept=".csv,text/csv"
+      /></label>
+    </dialog>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
