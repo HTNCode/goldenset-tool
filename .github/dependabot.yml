@@ -1,0 +1,16 @@
+version: 2
+updates:
+  # アプリ（ブラウザ向けの AWS SDK）とインフラ（CDK）は lockfile が別なので、それぞれ追う
+  - package-ecosystem: bun
+    directories:
+      - /
+      - /infra
+    schedule:
+      interval: weekly
+    # 公開直後の版は乗っ取りの可能性があるため、少し待ってから PR を出す
+    cooldown:
+      default-days: 3
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]

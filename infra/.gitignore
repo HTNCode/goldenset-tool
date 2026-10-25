@@ -2,3 +2,5 @@ node_modules/
 cdk.out/
 *.d.ts
 .cdk.staging/
+# valueFromLookup や AZ の検索結果がアカウントIDとともに書き込まれる。公開リポジトリなのでコミットしない
+cdk.context.json
