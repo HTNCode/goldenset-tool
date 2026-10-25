@@ -4,6 +4,7 @@ import {
   AccountRecovery,
   CfnIdentityPool,
   CfnIdentityPoolRoleAttachment,
+  Mfa,
   OAuthScope,
   UserPool,
   UserPoolClient,
@@ -42,6 +43,11 @@ export class GoldenAuthStack extends Stack {
       signInAliases: { email: true },
       standardAttributes: { email: { required: true, mutable: false } },
       accountRecovery: AccountRecovery.EMAIL_ONLY,
+      // ログインできれば取り込みバケット全体を読み書きできるので、パスワードだけにしない。
+      // 第2要素は認証アプリ（TOTP）だけにする。メールはパスワードの再設定に使うため、
+      // 第2要素に使うと再設定の手段が無くなる。初回ログイン時に Hosted UI が登録を求める
+      mfa: Mfa.REQUIRED,
+      mfaSecondFactor: { otp: true, sms: false },
       removalPolicy: props.removalPolicy,
     });
 
