@@ -166,6 +166,8 @@ aws cognito-idp admin-create-user \
   --user-attributes Name=email,Value=you@example.com Name=email_verified,Value=true
 ```
 
+多要素認証（MFA）は必須で、第2要素は認証アプリ（TOTP）だけです。ログインできれば取り込みバケットを読み書きできるため、パスワードだけでは入れないようにしています。初回のログインで Hosted UI が認証アプリの登録を求めるので、Google Authenticator などで QR コードを読み取ってください。メールはパスワードの再設定に使うため、第2要素には使いません。
+
 ### アプリをビルドする
 
 ブラウザから S3 を呼ぶ部分だけが AWS SDK に依存しています。リポジトリのルートでバンドルしてください。

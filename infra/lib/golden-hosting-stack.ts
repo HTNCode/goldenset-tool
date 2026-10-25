@@ -18,8 +18,11 @@ import {
   AllowedMethods,
   CachePolicy,
   Distribution,
+  HeadersFrameOption,
+  HeadersReferrerPolicy,
   LambdaEdgeEventType,
   PriceClass,
+  ResponseHeadersPolicy,
   ViewerProtocolPolicy,
   experimental,
 } from "aws-cdk-lib/aws-cloudfront";
@@ -94,6 +97,8 @@ export class GoldenHostingStack extends Stack {
       description: "Golden Foundry viewer request authentication",
     });
 
+    const responseHeadersPolicy = this.createResponseHeadersPolicy(app);
+
     const distribution = new Distribution(this, "Distribution", {
       defaultRootObject: "index.html",
       priceClass: PriceClass.PRICE_CLASS_200,
@@ -102,6 +107,7 @@ export class GoldenHostingStack extends Stack {
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
         cachePolicy: CachePolicy.CACHING_OPTIMIZED,
+        responseHeadersPolicy,
         edgeLambdas: [
           {
             functionVersion: authFunction.currentVersion,
@@ -117,6 +123,7 @@ export class GoldenHostingStack extends Stack {
           viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
           cachePolicy: CachePolicy.CACHING_DISABLED,
+          responseHeadersPolicy,
           edgeLambdas: [
             {
               functionVersion: authFunction.currentVersion,
@@ -148,6 +155,42 @@ export class GoldenHostingStack extends Stack {
     new CfnOutput(this, "DistributionId", {
       value: distribution.distributionId,
     }).overrideLogicalId("DistributionId");
+  }
+
+  /**
+   * セキュリティヘッダ。ブラウザが直接呼ぶのは S3 の取り込みバケットと
+   * Cognito Identity だけなので、connect-src をそこに絞る。
+   * 呼び出し先を増やしたら connect-src にも足すこと
+   */
+  private createResponseHeadersPolicy(app: AppConfig): ResponseHeadersPolicy {
+    const contentSecurityPolicy = [
+      "default-src 'self'",
+      "script-src 'self'",
+      "style-src 'self'",
+      "img-src 'self' data:",
+      `connect-src 'self' https://${app.intakeBucket}.s3.${app.region}.amazonaws.com https://cognito-identity.${app.region}.amazonaws.com`,
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "frame-ancestors 'none'",
+    ].join("; ");
+
+    return new ResponseHeadersPolicy(this, "SecurityHeaders", {
+      securityHeadersBehavior: {
+        contentSecurityPolicy: { contentSecurityPolicy, override: true },
+        strictTransportSecurity: {
+          accessControlMaxAge: Duration.days(365),
+          includeSubdomains: true,
+          override: true,
+        },
+        contentTypeOptions: { override: true },
+        frameOptions: { frameOption: HeadersFrameOption.DENY, override: true },
+        referrerPolicy: {
+          referrerPolicy: HeadersReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN,
+          override: true,
+        },
+      },
+    });
   }
 
   /**
@@ -268,7 +311,7 @@ export class GoldenHostingStack extends Stack {
         physicalResourceId: PhysicalResourceId.of(`${clientId}-callback-urls`),
       },
       policy: AwsCustomResourcePolicy.fromSdkCalls({
-        resources: AwsCustomResourcePolicy.ANY_RESOURCE,
+        resources: [`arn:aws:cognito-idp:${this.region}:${this.account}:userpool/${userPoolId}`],
       }),
       installLatestAwsSdk: false,
     });

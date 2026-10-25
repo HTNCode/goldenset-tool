@@ -1,4 +1,4 @@
-import { createPublicKey, createVerify, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHash, createPublicKey, createVerify, randomBytes, timingSafeEqual } from "node:crypto";
 
 /**
  * CloudFront の viewer request で動く認証関数。
@@ -15,6 +15,8 @@ const SIGN_OUT_PATH = "/auth/signout";
 const TOKEN_PATH = "/auth/token";
 const ID_TOKEN_COOKIE = "gf_id_token";
 const STATE_COOKIE = "gf_state";
+// 認可コードを横取りされても、この値を持たない相手はトークンに交換できない（PKCE）
+const PKCE_COOKIE = "gf_pkce";
 const STATE_TTL_SECONDS = 600;
 
 /** JWKS はキーが変わらないので、コンテナが生きている間は使い回す */
@@ -166,14 +168,20 @@ function startLogin(domain, returnPath) {
   // state は CSRF 対策の乱数と戻り先を連結し、Cookie 側の乱数と突き合わせる
   const nonce = randomBytes(16).toString("base64url");
   const encodedReturn = Buffer.from(sanitizeReturnPath(returnPath), "utf8").toString("base64url");
+  const verifier = randomBytes(32).toString("base64url");
   const location = hostedUiUrl("/oauth2/authorize", {
     client_id: CONFIG.clientId,
     response_type: "code",
     scope: "openid",
     redirect_uri: `https://${domain}${CALLBACK_PATH}`,
     state: `${nonce}.${encodedReturn}`,
+    code_challenge: createHash("sha256").update(verifier).digest("base64url"),
+    code_challenge_method: "S256",
   });
-  return redirect(location, [buildCookie(STATE_COOKIE, nonce, STATE_TTL_SECONDS)]);
+  return redirect(location, [
+    buildCookie(STATE_COOKIE, nonce, STATE_TTL_SECONDS),
+    buildCookie(PKCE_COOKIE, verifier, STATE_TTL_SECONDS),
+  ]);
 }
 
 function noncesMatch(expected, actual) {
@@ -199,6 +207,10 @@ async function handleCallback(request, domain) {
   if (expectedNonce === null || !noncesMatch(expectedNonce, state.slice(0, separator))) {
     return errorResponse("401", "Unauthorized", "state が一致しません。もう一度アクセスしてください。");
   }
+  const verifier = readCookie(request.headers, PKCE_COOKIE);
+  if (verifier === null) {
+    return errorResponse("401", "Unauthorized", "ログインの途中の情報がありません。もう一度アクセスしてください。");
+  }
 
   let returnPath = "/";
   try {
@@ -213,6 +225,7 @@ async function handleCallback(request, domain) {
     client_id: CONFIG.clientId,
     code,
     redirect_uri: `https://${domain}${CALLBACK_PATH}`,
+    code_verifier: verifier,
   });
   const response = await fetch(`https://${CONFIG.hostedUiDomain}/oauth2/token`, {
     method: "POST",
@@ -236,6 +249,7 @@ async function handleCallback(request, domain) {
   return redirect(`https://${domain}${returnPath}`, [
     buildCookie(ID_TOKEN_COOKIE, tokens.id_token, maxAge),
     buildCookie(STATE_COOKIE, "", 0),
+    buildCookie(PKCE_COOKIE, "", 0),
   ]);
 }
 
