@@ -5,24 +5,24 @@
     "": {
       "name": "golden-foundry-infra",
       "dependencies": {
-        "aws-cdk-lib": "2.263.0",
-        "constructs": "10.8.0",
+        "aws-cdk-lib": "2.274.0",
+        "constructs": "10.8.1",
       },
       "devDependencies": {
-        "@types/node": "26.1.2",
-        "aws-cdk": "2.1134.0",
+        "@types/node": "26.6.5",
+        "aws-cdk": "2.1146.0",
         "typescript": "7.0.2",
       },
     },
   },
   "packages": {
-    "@aws-cdk/asset-awscli-v1": ["@aws-cdk/asset-awscli-v1@2.2.282", "", {}, "sha512-7hKMi5tTxDcKGIMIOq14PnY0GBcugW33Uh/2YHDZiEwSxLeFOCYBwhR+BFXONb/EJeVI3RETFgailNZbkcKF6g=="],
+    "@aws-cdk/asset-awscli-v1": ["@aws-cdk/asset-awscli-v1@2.2.292", "", {}, "sha512-d4aMFsAFj19FtxVyw8IzlUKv5Zu4sIvgnEjI2IU6IWBJgVbJ4aFnadANqYa+6MwB1CQbGOg0jh8WE77M+Nb/9A=="],
 
-    "@aws-cdk/asset-node-proxy-agent-v6": ["@aws-cdk/asset-node-proxy-agent-v6@2.1.2", "", {}, "sha512-pDiuqH+qY3zM9lhhLjbKJ1tnKOHzQ2V4Wr/3qsxyKeKAkuPMI/BVGvZG1PbrikUw949cGVTfVEt4ETKKYnrj0Q=="],
+    "@aws-cdk/asset-node-proxy-agent-v6": ["@aws-cdk/asset-node-proxy-agent-v6@2.1.3", "", {}, "sha512-98We1QWfin9vtuuQtNFhIIAEWb8CreyYTAP0Vn8HqSBoNiFJM9nZgifJeQawT9Wq0NX1HCNFlxCyTccIrK1PSA=="],
 
-    "@aws-cdk/cloud-assembly-schema": ["@aws-cdk/cloud-assembly-schema@54.15.0", "", { "dependencies": { "jsonschema": "^1.5.0", "semver": "^7.8.5" } }, "sha512-eWdbH+SRmxeTSyECibUdP4MkRqhoXJ7GMFiHJgIt5081sU4D42tsNmwe8rPHQHyFXRTwauxdLNdhJeykOv8+Cg=="],
+    "@aws-cdk/cloud-assembly-schema": ["@aws-cdk/cloud-assembly-schema@55.2.0", "", { "dependencies": { "jsonschema": "^1.5.0", "semver": "^7.8.5" } }, "sha512-DHfYrZdyJZwWlI5sOK97X7SDc5Ow+uH3w3/qnB/ZYtY530lEsLObOoq/Z8BcJM6bAwJI6ozIgg9VYg2ot+A1jQ=="],
 
-    "@types/node": ["@types/node@26.1.2", "", { "dependencies": { "undici-types": "~8.3.0" } }, "sha512-Vu4a5UFA9rIIFJ7rB/Vaafh9lrCQszopTCx6KjFboXTGQbPNasehVR5TEiithSDGyd1DEiUByggTZsg8jukeIg=="],
+    "@types/node": ["@types/node@26.6.5", "", { "dependencies": { "undici-types": "~8.9.0" } }, "sha512-uMzsv9stDdofIZBx4UGh4Z9ZgXnGC9seRDscilBcTHAeOFk67MZg/k9bWVfO+bk4qZmG+l52hRnLwUiH2LnJTg=="],
 
     "@typescript/typescript-aix-ppc64": ["@typescript/typescript-aix-ppc64@7.0.2", "", { "os": "aix", "cpu": "ppc64" }, "sha512-MTKKkWB7p/0E9xi1d1tHtZ5PiLkGEMIq88pK2CubZjOsLtYTLqhgIgi6zepFa+9GHZ6h05NMCkQxGKiPXMxXtQ=="],
 
@@ -64,25 +64,25 @@
 
     "@typescript/typescript-win32-x64": ["@typescript/typescript-win32-x64@7.0.2", "", { "os": "win32", "cpu": "x64" }, "sha512-0BQ3HkAHHlKLSp1qRvf3SUhGpGsDuhB/jgFw75guyqbxJqEaS0Cw/VFO8i2nHglJUzQCRtMMR/IBAKE3ETMC4g=="],
 
-    "aws-cdk": ["aws-cdk@2.1134.0", "", { "bin": { "cdk": "bin/cdk" } }, "sha512-Fy/g+gdpMpkhAAoCNlZtX0s4mD7q58bHlDV6QfbnTeifmQ5cEge26c5rB+U4qKB/bDudxNuJjQk/mSSk0ysnug=="],
+    "aws-cdk": ["aws-cdk@2.1146.0", "", { "bin": { "cdk": "bin/cdk" } }, "sha512-MwIIRSSVGMFDwe0MysbD4H8UjUwC1Cfn/3WjShsjdmgwPlyFn/n4Vrn5pYxIoUCjRUBsPLtq0t5a0LSE2Um/eg=="],
 
-    "aws-cdk-lib": ["aws-cdk-lib@2.263.0", "", { "dependencies": { "@aws-cdk/asset-awscli-v1": "2.2.282", "@aws-cdk/asset-node-proxy-agent-v6": "^2.1.2", "@aws-cdk/cloud-assembly-api": "^2.2.6", "@aws-cdk/cloud-assembly-schema": "^54.11.0", "@aws/cloudformation-validate": "1.6.0-beta", "@balena/dockerignore": "^1.0.2", "case": "1.6.3", "fs-extra": "^11.3.6", "ignore": "^5.3.2", "jsonschema": "^1.5.0", "mime-types": "^2.1.35", "minimatch": "^10.2.5", "punycode": "^2.3.1", "semver": "^7.8.5", "yaml": "1.10.3" }, "peerDependencies": { "constructs": "^10.5.0" } }, "sha512-cXC9wnOr+LknMee9x0kYwofgVs8aN8eBKsbzcE90sDUtpLTgWG2Bd+9koqxBKPeIU8kig/GGBFwJ69Wr+hLKDg=="],
+    "aws-cdk-lib": ["aws-cdk-lib@2.274.0", "", { "dependencies": { "@aws-cdk/asset-awscli-v1": "2.2.292", "@aws-cdk/asset-node-proxy-agent-v6": "^2.1.3", "@aws-cdk/cloud-assembly-api": "^2.5.0", "@aws-cdk/cloud-assembly-schema": "^55.0.0", "@aws/cloudformation-validate": "1.12.1", "@balena/dockerignore": "^1.0.2", "case": "1.6.3", "fs-extra": "^11.4.1", "ignore": "^5.3.2", "jsonschema": "^1.5.0", "mime-types": "^2.1.35", "minimatch": "^10.2.6", "punycode": "^2.3.1", "semver": "^7.8.5", "yaml": "1.10.3" }, "peerDependencies": { "constructs": "^10.5.0" } }, "sha512-jez6nnPRPGLRv6PfaVUdJNnIQN/5OQQRyQRfdf2lbkww5Z2W4FJ+RIEW1TpYgJ3oLXoM23f9LGA1kxoqvF/sFg=="],
 
-    "constructs": ["constructs@10.8.0", "", {}, "sha512-pJHp2CxvTG0ttp52rZvQfkbspPLZzttWPooIRLBwlZK8rV7ZhkjIkyZWJhIfBDC4YdcwIDmXyUFr1ieJaqjBbg=="],
+    "constructs": ["constructs@10.8.1", "", {}, "sha512-98yGXYyhePqPYh3cYu8nzBERmAhC0DONe3UD03okK0nehZ7hYP4wgZuf02a04+uOWxnTJ5Rpp5m0GRNpwyLGGA=="],
 
     "typescript": ["typescript@7.0.2", "", { "optionalDependencies": { "@typescript/typescript-aix-ppc64": "7.0.2", "@typescript/typescript-darwin-arm64": "7.0.2", "@typescript/typescript-darwin-x64": "7.0.2", "@typescript/typescript-freebsd-arm64": "7.0.2", "@typescript/typescript-freebsd-x64": "7.0.2", "@typescript/typescript-linux-arm": "7.0.2", "@typescript/typescript-linux-arm64": "7.0.2", "@typescript/typescript-linux-loong64": "7.0.2", "@typescript/typescript-linux-mips64el": "7.0.2", "@typescript/typescript-linux-ppc64": "7.0.2", "@typescript/typescript-linux-riscv64": "7.0.2", "@typescript/typescript-linux-s390x": "7.0.2", "@typescript/typescript-linux-x64": "7.0.2", "@typescript/typescript-netbsd-arm64": "7.0.2", "@typescript/typescript-netbsd-x64": "7.0.2", "@typescript/typescript-openbsd-arm64": "7.0.2", "@typescript/typescript-openbsd-x64": "7.0.2", "@typescript/typescript-sunos-x64": "7.0.2", "@typescript/typescript-win32-arm64": "7.0.2", "@typescript/typescript-win32-x64": "7.0.2" }, "bin": { "tsc": "bin/tsc" } }, "sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA=="],
 
-    "undici-types": ["undici-types@8.3.0", "", {}, "sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ=="],
+    "undici-types": ["undici-types@8.9.0", "", {}, "sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg=="],
 
     "@aws-cdk/cloud-assembly-schema/jsonschema": ["jsonschema@1.5.0", "", { "bundled": true }, "sha512-K+A9hhqbn0f3pJX17Q/7H6yQfD/5OXgdrR5UE12gMXCiN9D5Xq2o5mddV2QEcX/bjla99ASsAAQUyMCCRWAEhw=="],
 
     "@aws-cdk/cloud-assembly-schema/semver": ["semver@7.8.5", "", { "bundled": true, "bin": { "semver": "bin/semver.js" } }, "sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA=="],
 
-    "aws-cdk-lib/@aws-cdk/cloud-assembly-api": ["@aws-cdk/cloud-assembly-api@2.3.0", "", { "dependencies": { "json-source-map": "^0.6.1", "jsonschema": "^1.5.0", "semver": "^7.8.5" }, "peerDependencies": { "@aws-cdk/cloud-assembly-schema": ">=54.12.0" }, "bundled": true }, "sha512-Z+TYWH9YJGDQSwjORTWvfRFHGK5Gzdp73ElVO8mmZrgndlZgNV2LJOcX1HYRlU/OuR7I+Qo5GLpfc/PM1s7JlQ=="],
+    "aws-cdk-lib/@aws-cdk/cloud-assembly-api": ["@aws-cdk/cloud-assembly-api@2.5.0", "", { "dependencies": { "json-source-map": "^0.6.1", "jsonschema": "^1.5.0", "semver": "^7.8.5" }, "peerDependencies": { "@aws-cdk/cloud-assembly-schema": ">=55.0.0" }, "bundled": true }, "sha512-cE19OP9Ad3f04wkvntxqMxwKXutvkVyymwiqHsvEnmBktXjdm6Ydjd2X7b9QcU3QvbL7Gdt4bc3d4STMROCjfg=="],
 
-    "aws-cdk-lib/@aws-cdk/cloud-assembly-schema": ["@aws-cdk/cloud-assembly-schema@54.15.0", "", { "dependencies": { "jsonschema": "^1.5.0", "semver": "^7.8.5" } }, "sha512-eWdbH+SRmxeTSyECibUdP4MkRqhoXJ7GMFiHJgIt5081sU4D42tsNmwe8rPHQHyFXRTwauxdLNdhJeykOv8+Cg=="],
+    "aws-cdk-lib/@aws-cdk/cloud-assembly-schema": ["@aws-cdk/cloud-assembly-schema@55.2.0", "", { "dependencies": { "jsonschema": "^1.5.0", "semver": "^7.8.5" } }, "sha512-DHfYrZdyJZwWlI5sOK97X7SDc5Ow+uH3w3/qnB/ZYtY530lEsLObOoq/Z8BcJM6bAwJI6ozIgg9VYg2ot+A1jQ=="],
 
-    "aws-cdk-lib/@aws/cloudformation-validate": ["@aws/cloudformation-validate@1.6.0-beta", "", { "bundled": true }, "sha512-criDxL/FP0Te5HIH6p+TvENftgUztOMKw7LMLhAIDuq/N/kkMsYfxlG7XeyHlq0lEpQwUUek3tgPdSjhLTK3jQ=="],
+    "aws-cdk-lib/@aws/cloudformation-validate": ["@aws/cloudformation-validate@1.12.1", "", { "bundled": true }, "sha512-syZyTZQ1JPubKfzkfxQ8AoLEhma+2Upsz/ESLiosVnncdo4cdWDhsLp5Bxol3Wi94j8gJkch8H4rsYZWk4K0OQ=="],
 
     "aws-cdk-lib/@balena/dockerignore": ["@balena/dockerignore@1.0.2", "", { "bundled": true }, "sha512-wMue2Sy4GAVTk6Ic4tJVcnfdau+gx2EnG7S+uAEe+TWJFqE4YoWN4/H8MSLj4eYJKxGg26lZwboEniNiNwZQ6Q=="],
 
@@ -92,7 +92,7 @@
 
     "aws-cdk-lib/case": ["case@1.6.3", "", { "bundled": true }, "sha512-mzDSXIPaFwVDvZAHqZ9VlbyF4yyXRuX6IvB06WvPYkqJVO24kX1PPhv9bfpKNFZyxYFmmgo03HUiD8iklmJYRQ=="],
 
-    "aws-cdk-lib/fs-extra": ["fs-extra@11.4.0", "", { "dependencies": { "graceful-fs": "^4.2.0", "jsonfile": "^6.0.1", "universalify": "^2.0.0" }, "bundled": true }, "sha512-EQsFzMUJkCKGr1ePqlYADkIUmHW1s3ZXr5Yqy6wbGrfUCphpl2maM/kyOIRA2HpP3AaFQTZXD4ldjek+nccddA=="],
+    "aws-cdk-lib/fs-extra": ["fs-extra@11.4.1", "", { "dependencies": { "graceful-fs": "^4.2.0", "jsonfile": "^6.0.1", "universalify": "^2.0.0" }, "bundled": true }, "sha512-KYAb4c9BJQI6QqGKthV68OHe0badztdXJWKo0WtBA9IuCFPTKvE5ZdUBglP833aMjhaSPNO4A5j/EkzZtGlKjA=="],
 
     "aws-cdk-lib/graceful-fs": ["graceful-fs@4.2.11", "", {}, "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="],
 
