@@ -89,7 +89,7 @@ export class GoldenHostingStack extends Stack {
     // Lambda@Edge は us-east-1 に置く必要がある。EdgeFunction がその
     // サポートスタックを作るため、us-east-1 にもブートストラップが要る。
     const authFunction = new experimental.EdgeFunction(this, "AuthFunction", {
-      runtime: Runtime.NODEJS_22_X,
+      runtime: Runtime.NODEJS_24_X,
       handler: "index.handler",
       code: Code.fromAsset(this.stageEdgeFunction(edge)),
       timeout: Duration.seconds(5),
